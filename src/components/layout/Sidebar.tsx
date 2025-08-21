@@ -22,6 +22,10 @@ interface SidebarProps {
   setViewMode: (mode: ViewMode) => void;
   activeFilter: FilterType;
   setActiveFilter: (filter: FilterType) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -29,6 +33,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   setViewMode,
   activeFilter,
   setActiveFilter,
+  collapsed,
+  onToggleCollapse,
 }) => {
   const { user } = useAuth();
 
@@ -54,12 +60,31 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
+  // Handle sidebar background click to toggle collapse
+  const handleSidebarClick = (e: React.MouseEvent) => {
+    // Only toggle if clicking on the sidebar background, not on buttons
+    if (e.target === e.currentTarget) {
+      onToggleCollapse();
+    }
+  };
+
+  // Prevent event bubbling when clicking on interactive elements
+  const handleButtonClick = (e: React.MouseEvent, callback: () => void) => {
+    e.stopPropagation(); // Prevent sidebar click
+    callback();
+  };
+
   return (
-    <div className={styles.sidebar}>
+    <div 
+      className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}
+      onClick={handleSidebarClick}
+    >
       {/* User Profile */}
-      <div className={styles.userProfile}>
+      <div 
+        className={styles.userProfile}
+        onClick={handleSidebarClick} // Allow clicking on profile area to collapse
+      >
         <div className={styles.userInfo}>
-          {/* ONLY show one avatar - either image OR placeholder, not both */}
           {user?.photoURL ? (
             <img
               src={user.photoURL}
@@ -68,14 +93,16 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           ) : (
             <div className={styles.avatarPlaceholder}>
-              <User size={20} />
+              <User size={collapsed ? 16 : 20} />
             </div>
           )}
-          <div className={styles.userDetails}>
-            <p className={styles.userName}>
-              {user?.displayName || user?.email}
-            </p>
-          </div>
+          {!collapsed && (
+            <div className={styles.userDetails}>
+              <p className={styles.userName}>
+                {user?.displayName || user?.email}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -85,15 +112,18 @@ const Sidebar: React.FC<SidebarProps> = ({
           {navItems.map((item) => (
             <motion.li key={item.id}>
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: collapsed ? 1.05 : 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setViewMode(item.id as ViewMode)}
+                onClick={(e) => handleButtonClick(e, () => setViewMode(item.id as ViewMode))}
                 className={`${styles.navItem} ${
                   viewMode === item.id ? styles.active : ''
                 }`}
+                title={collapsed ? item.label : undefined}
               >
-                <item.icon size={20} />
-                <span>{item.label}</span>
+                <item.icon size={20} className={styles.navItemIcon} />
+                {!collapsed && (
+                  <span className={styles.navItemLabel}>{item.label}</span>
+                )}
               </motion.button>
             </motion.li>
           ))}
@@ -102,20 +132,23 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Filters */}
       <div className={styles.filterSection}>
-        <h3 className={styles.filterTitle}>Filters</h3>
+        {!collapsed && <h3 className={styles.filterTitle}>Filters</h3>}
         <ul className={styles.filterList}>
           {filterItems.map((item) => (
             <motion.li key={item.id}>
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: collapsed ? 1.05 : 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveFilter(item.id as FilterType)}
+                onClick={(e) => handleButtonClick(e, () => setActiveFilter(item.id as FilterType))}
                 className={`${styles.filterItem} ${
                   activeFilter === item.id ? styles.active : ''
                 }`}
+                title={collapsed ? item.label : undefined}
               >
-                <item.icon size={16} />
-                <span>{item.label}</span>
+                <item.icon size={16} className={styles.filterItemIcon} />
+                {!collapsed && (
+                  <span className={styles.filterItemLabel}>{item.label}</span>
+                )}
               </motion.button>
             </motion.li>
           ))}
@@ -124,13 +157,18 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Bottom Actions */}
       <div className={styles.bottomActions}>
-        <ThemeToggle />
+        <div onClick={(e) => e.stopPropagation()}>
+          <ThemeToggle />
+        </div>
         <button
-          onClick={handleLogout}
+          onClick={(e) => handleButtonClick(e, handleLogout)}
           className={styles.logoutButton}
+          title={collapsed ? 'Sign Out' : undefined}
         >
-          <LogOut size={16} />
-          <span>Sign Out</span>
+          <LogOut size={16} className={styles.logoutButtonIcon} />
+          {!collapsed && (
+            <span className={styles.logoutButtonLabel}>Sign Out</span>
+          )}
         </button>
       </div>
     </div>

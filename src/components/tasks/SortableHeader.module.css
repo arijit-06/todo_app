@@ -14,15 +14,15 @@
   box-shadow: var(--glass-shadow);
 }
 
-/* Sort Fields - Proper contrast for both themes */
+/* Better sort field colors for dark mode */
 .sortField {
   display: flex;
   align-items: center;
   gap: 0.25rem;
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--text-primary);
-  font-weight: 600;
+  color: var(--text-secondary); /* Use secondary text color */
+  font-weight: 500;
   transition: var(--transition);
   padding: 0.5rem 1rem;
   border-radius: var(--radius-lg);
@@ -31,16 +31,16 @@
 }
 
 .sortField:hover {
-  color: var(--primary-600);
-  background: var(--glass-bg);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
   transform: translateY(-1px);
 }
 
 .sortField.active {
-  color: var(--primary-600);
-  font-weight: 700;
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--text-primary); /* Use primary text color for active */
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .fieldLabel {
@@ -55,7 +55,7 @@
 
 .sortField.active .sortIcon {
   opacity: 1;
-  color: var(--primary-600);
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {

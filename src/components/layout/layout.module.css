@@ -1,79 +1,76 @@
 .layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
   height: 100vh;
   gap: 1rem;
   padding: 1rem;
   overflow: hidden;
   background: transparent;
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+  transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.layout.sidebarCollapsed {
+  --sidebar-width: var(--sidebar-collapsed-width);
+}
+
+/* Sidebar with smooth transitions */
 .sidebar {
-  background: rgba(255, 255, 255, 0.3); /* Use ONE glass background */
+  background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
-}
-
-/* FORCE REMOVE ALL OVERLAYS */
-.sidebar::before,
-.sidebar::after,
-.header::before,
-.header::after,
-.content::before,
-.content::after,
-.searchContainer::before,
-.searchContainer::after {
-  content: none !important;
-  display: none !important;
-}
-
-.main {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 2rem);
-  gap: 1rem;
+  overflow: hidden;
+  width: var(--sidebar-width);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
 }
 
-/* Glass Header - NO OVERLAYS */
-.header {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: var(--radius-xl);
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: 64px;
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
 }
 
-.content {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
-  background: transparent;
+/* Smooth transitions for all content */
+.sidebar * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* User Profile - FIXED AVATAR */
+/* User Profile smooth transitions */
 .userProfile {
   padding: 1.5rem;
   border-bottom: 1px solid var(--glass-border);
-  height: 64px;
+  height: 80px;
   display: flex;
   align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .userProfile {
+  justify-content: center;
+  padding: 1rem 0.5rem;
 }
 
 .userInfo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* FORCE AVATAR TO SHOW */ /* Remove the !important spam and make it cleaner */
+.sidebar.collapsed .userInfo {
+  flex-direction: column;
+  gap: 0;
+}
+
 .avatar {
   width: 40px;
   height: 40px;
@@ -82,6 +79,14 @@
   border: 2px solid var(--glass-border);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .avatar {
+  width: 32px;
+  height: 32px;
 }
 
 .avatarPlaceholder {
@@ -95,6 +100,15 @@
   justify-content: center;
   color: var(--text-primary);
   font-size: 18px;
+  flex-shrink: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .avatarPlaceholder {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
 }
 
 .userName {
@@ -105,12 +119,28 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Navigation */
+.sidebar.collapsed .userName {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Navigation smooth transitions */
 .navigation {
   padding: 1.5rem;
   flex-shrink: 0;
+  transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .navigation {
+  padding: 1rem 0.5rem;
 }
 
 .navList {
@@ -133,26 +163,56 @@
   gap: 0.75rem;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--transition);
   color: var(--text-secondary);
   text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .navItem {
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+}
+
+.navItemIcon {
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navItemLabel {
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .navItemLabel {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
 .navItem:hover {
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
 }
 
 .navItem.active {
-  background: rgba(59, 130, 246, 0.15);
-  color: var(--primary-600);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Filters */
+/* Filters smooth transitions */
 .filterSection {
   padding: 0 1.5rem 1rem;
   flex: 1;
   overflow-y: auto;
+  transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .filterSection {
+  padding: 0 0.5rem 1rem;
 }
 
 .filterTitle {
@@ -162,6 +222,16 @@
   letter-spacing: 0.05em;
   color: var(--text-tertiary);
   margin-bottom: 0.75rem;
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .filterTitle {
+  opacity: 0;
+  height: 0;
+  margin: 0;
 }
 
 .filterList {
@@ -184,28 +254,61 @@
   gap: 0.75rem;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: var(--transition);
   color: var(--text-tertiary);
   text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .filterItem {
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.filterItemIcon {
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filterItemLabel {
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .filterItemLabel {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
 .filterItem:hover {
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
 }
 
 .filterItem.active {
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
-  background: var(--glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Bottom Actions */
+/* Bottom Actions smooth transitions */
 .bottomActions {
   padding: 1.5rem;
   border-top: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .bottomActions {
+  padding: 1rem 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .logoutButton {
@@ -219,7 +322,30 @@
   font-size: 0.875rem;
   color: var(--text-tertiary);
   cursor: pointer;
-  transition: var(--transition);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .logoutButton {
+  padding: 0.5rem;
+  justify-content: center;
+}
+
+.logoutButtonIcon {
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logoutButtonLabel {
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .logoutButtonLabel {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
 .logoutButton:hover {
@@ -227,29 +353,46 @@
   background: rgba(239, 68, 68, 0.1);
 }
 
-/* Search Container - SINGLE LAYER ONLY */
+/* All other existing styles remain the same... */
+.main {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 2rem);
+  position: relative;
+}
+
+.floatingSearch {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .searchContainer {
   position: relative;
-  width: 300px;
+  width: 350px;
   transition: width 0.3s ease;
-  /* NO EXTRA BACKGROUND */
-  background: transparent !important;
+  background: transparent;
 }
 
 .searchContainer.searchExpanded {
-  width: 450px;
+  width: 500px;
 }
 
 .searchInput {
   width: 100%;
   padding: 0.875rem 1.25rem 0.875rem 3rem;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
-  background: var(--glass-bg);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
   color: var(--text-primary);
   font-size: 0.875rem;
   transition: var(--transition);
   outline: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .searchInput::placeholder {
@@ -257,8 +400,9 @@
 }
 
 .searchInput:focus {
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .searchIcon {
@@ -271,7 +415,14 @@
   z-index: 1;
 }
 
-/* Responsive */
+.content {
+  flex: 1;
+  padding: 5rem 2rem 2rem 2rem;
+  overflow-y: auto;
+  background: transparent;
+}
+
+/* Responsive styles remain the same... */
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
@@ -282,21 +433,44 @@
   .sidebar {
     height: auto;
     max-height: 40vh;
+    width: 100% !important;
+    cursor: default;
+  }
+
+  .sidebar.collapsed {
+    width: 100% !important;
   }
 
   .main {
     height: calc(60vh - 1rem);
   }
 
+  .searchContainer {
+    width: 280px;
+  }
+
   .searchContainer.searchExpanded {
-    width: 350px;
+    width: 400px;
+  }
+
+  .floatingSearch {
+    position: relative;
+    top: 0;
+    left: auto;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .content {
+    padding: 2rem 1rem;
   }
 }
 
-.sidebar::before,
-.header::before,
-.searchContainer::before,
-.searchContainer::after {
-  display: none !important;
-  content: none !important;
+.sortField.active {
+  color: var(--text-primary);
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
 import Sidebar from './Sidebar';
-import Header from './Header';
 import TaskList from '../tasks/TaskList';
 import CalendarView from '../calendar/CalendarView';
 import { ViewMode, FilterType, SortOption } from '../../types';
@@ -12,31 +12,43 @@ const Layout: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [sortBy, setSortBy] = useState<SortOption>('created');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const handleSortChange = (field: SortOption, ascending: boolean) => {
     setSortBy(field);
-    // You can store ascending state if needed for future use
   };
 
   return (
-    <div className={styles.layout}>
-      <div className={styles.sidebar}>
-        <Sidebar
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-        />
-      </div>
+    <div className={`${styles.layout} ${sidebarCollapsed ? styles.sidebarCollapsed : ''}`}>
+      <Sidebar
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
       
       <div className={styles.main}>
-        <div className={styles.header}>
-          <Header 
-            searchQuery={searchQuery} 
-            setSearchQuery={setSearchQuery}
-          />
+        {/* Floating Search Bar */}
+        <div className={styles.floatingSearch}>
+          <div className={`${styles.searchContainer} ${isSearchFocused ? styles.searchExpanded : ''}`}>
+            <Search size={16} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
+              className={styles.searchInput}
+            />
+          </div>
         </div>
-        
+
         <div className={styles.content}>
           <motion.div
             key={viewMode}
