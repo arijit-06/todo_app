@@ -1,0 +1,170 @@
+.themeToggle {
+  padding: 0.5rem;
+  background: none;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.themeToggle:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  padding: 1.5rem 1.5rem 0;
+  border-bottom: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalCloseButton {
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modalCloseButton:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.buttonPrimary {
+  background-color: var(--primary-600);
+  color: white;
+}
+
+.buttonPrimary:hover {
+  background-color: var(--primary-700);
+}
+
+.buttonPrimary:disabled {
+  background-color: var(--gray-400);
+  cursor: not-allowed;
+}
+
+.buttonSecondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+}
+
+.buttonSecondary:hover {
+  background-color: var(--bg-secondary);
+}
+
+.buttonDanger {
+  background-color: var(--error);
+  color: white;
+}
+
+.buttonDanger:hover {
+  background-color: #dc2626;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.errorMessage {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--error);
+}
